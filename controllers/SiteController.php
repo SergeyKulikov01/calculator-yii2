@@ -125,4 +125,13 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+    /**
+     * Displays form page.
+     *
+     * @return string
+     */
+    public function actionForm()
+    {
+        return $this->render('form');
+    }
 }
