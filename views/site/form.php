@@ -10,12 +10,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="site-about">
     <h1>Форма калькулятора</h1>
 
-    <p>
-        This is the About page. You may modify the following file to customize its content:
-    </p>
-    <form>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-5">
+        <form>
   <div class="mb-3">
-  <select class="form-select" aria-label="Пример выбора по умолчанию">
+  <select class="form-select" aria-label="Выберите месяц">
   <option selected>Выберите месяц</option>
   <option value="jan">Январь</option>
   <option value="feb">Февраль</option>
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </select>
   </div>
   <div class="mb-3">
-  <select class="form-select" aria-label="Пример выбора по умолчанию">
+  <select class="form-select" aria-label="Выберите сырье">
   <option selected>Выберите сырье</option>
   <option value="shrot">Шрот</option>
   <option value="zhmih">Жмых</option>
@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </select>
   </div>
   <div class="mb-3">
-  <select class="form-select" aria-label="Пример выбора по умолчанию">
+  <select class="form-select" aria-label="Выберите тоннаж">
   <option selected>Выберите тоннаж</option>
   <option value="25">25</option>
   <option value="50">50</option>
@@ -44,5 +44,9 @@ $this->params['breadcrumbs'][] = $this->title;
   </div>
   <button type="submit" class="btn btn-primary">Рассчитать</button>
 </form>
+        </div>
+      </div>
+    </div>
+    
 
 </div>
