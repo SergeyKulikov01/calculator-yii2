@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\CalcForm;
 
 class SiteController extends Controller
 {
@@ -132,6 +133,17 @@ class SiteController extends Controller
      */
     public function actionForm()
     {
-        return $this->render('form');
+        $model = new CalcForm();
+        $basePath = __DIR__ . '/../runtime/queue.job';
+
+        if ($model->load(Yii::$app->request->post())) {
+            $text = 'material => ' . $model->material . PHP_EOL .
+                    'month => ' . $model->month . PHP_EOL .
+                    'weight => ' . $model->weight . PHP_EOL;
+            file_put_contents($basePath, $text);
+            // делаем что-то полезное с $model ...
+        }
+
+        return $this->render('form', ['model'=> $model ,]);
     }
 }
