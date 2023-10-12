@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\CalcForm;
+use yii\helpers\ArrayHelper;
 
 class SiteController extends Controller
 {
@@ -135,15 +136,19 @@ class SiteController extends Controller
     {
         $model = new CalcForm();
         $basePath = __DIR__ . '/../runtime/queue.job';
-
+        $arrays = Yii::$app->params['arrays'];
+        
         if ($model->load(Yii::$app->request->post())) {
             $text = 'material => ' . $model->material . PHP_EOL .
                     'month => ' . $model->month . PHP_EOL .
                     'weight => ' . $model->weight . PHP_EOL;
             file_put_contents($basePath, $text);
-            // делаем что-то полезное с $model ...
+            $array = ArrayHelper::getValue($arrays, $model->material);
+            $calculation = $array[$model->month][$model->weight];
+            
+            return $this->render('calcform', ['array' => $array, 'calculation' => $calculation]);
         }
 
-        return $this->render('form', ['model'=> $model ,]);
+        return $this->render('form', ['model'=> $model]);
     }
 }
