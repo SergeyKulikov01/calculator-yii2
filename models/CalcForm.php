@@ -13,7 +13,9 @@ class CalcForm extends Model
     public function rules()
     {
         return [
-            [['month', 'material','weight'], 'required'],
+            ['month', 'required', 'message' => 'Пожалуйста укажите месяц.' ],
+            ['material', 'required', 'message' => 'Пожалуйста укажите сырье.' ],
+            ['weight', 'required', 'message' => 'Пожалуйста укажите массу.' ]
         ];
     }
 }
