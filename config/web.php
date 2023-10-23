@@ -10,6 +10,12 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        '@api' => dirname(__DIR__) . '/api',
+    ],
+    'modules' => [
+        'v1' => [
+            'class' => 'api\v1\Module',
+        ],
     ],
     'components' => [
         'request' => [
@@ -50,7 +56,10 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'price'],
+                [
+                    'class' => '\yii\rest\UrlRule',
+                    'controller' => ['api/v1/price'],
+                ]
             ],
         ],
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace app\controllers;
+namespace api\v1\controllers;
 
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
 
 
-class PriceController extends Controller
+class CalculatePriceController extends Controller
 {
 
 
