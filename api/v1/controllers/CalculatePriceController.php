@@ -10,6 +10,7 @@ class CalculatePriceController extends Controller
 {
     public function actionIndex()
     {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $request = Yii::$app->request;
         $material = $request->get('material');
         $weight = $request->get('weight');
