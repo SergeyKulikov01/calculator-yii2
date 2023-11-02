@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Prices;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -10,7 +11,6 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\CalcForm;
-use yii\helpers\ArrayHelper;
 
 class SiteController extends Controller
 {
@@ -136,17 +136,30 @@ class SiteController extends Controller
     {
         $model = new CalcForm();
         $basePath = __DIR__ . '/../runtime/queue.job';
-        $arrays = Yii::$app->params['arrays'];
         
         if ($model->load(Yii::$app->request->post())) {
             $text = 'material => ' . $model->material . PHP_EOL .
                     'month => ' . $model->month . PHP_EOL .
                     'weight => ' . $model->weight . PHP_EOL;
             file_put_contents($basePath, $text);
-            $array = ArrayHelper::getValue($arrays, $model->material);
-            $calculation = $array[$model->month][$model->weight];
+
+            $resp = Prices::find()
+                ->JoinWith(['months','tonnages','raw_types'])
+                ->select(['month' => 'months.name','tonnage' => 'tonnages.value','price'])
+                ->where(['raw_types.name' => $model->material])
+                ->asArray()
+                ->all();
+
+            foreach ($resp as $key => $value){
+                $pr[$value["tonnage"]] =  $value["price"];
+                $mo[$value["month"]] = $pr;
+            }
+            $calculation = Prices::find()
+                ->joinWith(['months','tonnages','raw_types'])
+                ->where(['raw_types.name' => $model->material,'months.name'=>$model->month,'tonnages.value'=>$model->weight])
+                ->One();
             
-            return $this->render('calcform', ['array' => $array, 'calculation' => $calculation]);
+            return $this->render('calcform', ['array' => $mo, 'calculation' => $calculation->price]);
         }
 
         return $this->render('form', ['model'=> $model]);
