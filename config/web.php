@@ -58,7 +58,7 @@ $config = [
             'rules' => [
                 [
                     'class' => '\yii\rest\UrlRule',
-                    'controller' => ['api/v1/price'],
+                    'controller' => ['api/v1/CalculatePrice'],
                 ]
             ],
         ],
