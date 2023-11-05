@@ -18,13 +18,11 @@ class m231029_090308_create_tonnages_table extends Migration
             'created_at' => $this->datetime()->append('DEFAULT CURRENT_TIMESTAMP')->notNull(),
             'updated_at' => $this->datetime()->append('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull(),
         ]);
-
         $this->createIndex(
             'idx-tonnages-id',
             '{{%tonnages}}',
             'id'
         );
-
         $this->batchInsert('{{%tonnages}}',['value'], [
             [25],
             [50],

@@ -14,30 +14,28 @@ $this->params['breadcrumbs'][] = $this->title;
       <div class="row justify-content-center">
         <div class="col-5">
             <?php 
-              echo 'Стоимость доставки для выбранных Вами параметров равна: '. $calculation;
-              echo '<br>';
-              echo '<br>';
-              echo '<table class="table" >';
-                echo "<tr>"; 
-                  echo '<td scope="col">  </td>';
-                  echo '<td scope="col">25</td>';
-                  echo '<td scope="col">50</td>';
-                  echo '<td scope="col">75</td>';
-                  echo '<td scope="col">100</td>';
-                echo "</tr>";
-              foreach($array as $key => $value) {
+                echo 'Стоимость доставки для выбранных Вами параметров равна: '. $calculation;
+                echo '<br>';
+                echo '<br>';
+                echo '<table class="table" >';
                 echo "<tr>";
-                echo "<td> $key </td>";
-              foreach($value as $price) {
-                echo "<td> $price </td>";
-                  }
+                echo '<td>  </td>';
+                echo '<td>25</td>';
+                echo '<td>50</td>';
+                echo '<td>75</td>';
+                echo '<td>100</td>';
                 echo "</tr>";
+                foreach($array as $key => $value) {
+                    echo "<tr>";
+                    echo "<td> $key </td>";
+                    foreach($value as $price) {
+                        echo "<td> $price </td>";
+                    }
+                    echo "</tr>";
                 }
-              echo "</table>";
+                echo "</table>";
             ?>
         </div>
       </div>
     </div>
-    
-
 </div>

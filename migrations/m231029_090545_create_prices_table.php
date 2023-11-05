@@ -24,7 +24,6 @@ class m231029_090545_create_prices_table extends Migration
             '{{%prices}}',
             'tonnage_id'
         );
-
         $this->addForeignKey(
             'fk-prices-tonnage_id',
             '{{%prices}}',
@@ -34,14 +33,11 @@ class m231029_090545_create_prices_table extends Migration
             'CASCADE',
             'NO ACTION'
         );
-
-
         $this->createIndex(
             'idx-price-month_id',
             '{{%prices}}',
             'month_id'
         );
-
         $this->addForeignKey(
             'fk-prices-month_id',
             '{{%prices}}',
@@ -51,14 +47,11 @@ class m231029_090545_create_prices_table extends Migration
             'CASCADE',
             'NO ACTION'
         );
-
-
         $this->createIndex(
             'idx-price-raw_type_id',
             '{{%prices}}',
             'raw_type_id'
         );
-
         $this->addForeignKey(
             'fk-prices-raw_type_id',
             '{{%prices}}',
@@ -79,17 +72,6 @@ class m231029_090545_create_prices_table extends Migration
 	JOIN `months` AS m
 	JOIN `raw_types` AS r;
         ");
-
-//        INSERT INTO `prices`(`tonnage_id`,`month_id`,`raw_type_id`,`price`)
-//	SELECT
-//		t.id AS tonnage_id,
-//		m.id AS month_id,
-//		r.id AS raw_type_id,
-//		FLOOR(100+RAND()*100)
-//	FROM `tonnages` AS t
-//	JOIN `months` AS m
-//	JOIN `raw_types` AS r;
-
     }
 
     /**
@@ -101,36 +83,26 @@ class m231029_090545_create_prices_table extends Migration
             'fk-prices-raw_type_id',
             '{{%prices}}'
         );
-
-        // drops index for column `author_id`
         $this->dropIndex(
             'idx-price-raw_type_id',
             '{{%prices}}'
         );
-
-
         $this->dropForeignKey(
             'fk-prices-month_id',
             '{{%prices}}'
         );
-
-
         $this->dropIndex(
             'idx-price-month_id',
             '{{%prices}}'
         );
-
         $this->dropForeignKey(
             'fk-prices-tonnage_id',
             '{{%prices}}'
         );
-
-
         $this->dropIndex(
             'idx-price-tonnage_id',
             '{{%prices}}'
         );
-
         $this->dropTable('{{%prices}}');
     }
 }

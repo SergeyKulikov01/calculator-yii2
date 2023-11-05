@@ -24,14 +24,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'Ноябрь' => 'Ноябрь'
                   ],
                   ['prompt' => 'Выберите один вариант']); ?>
-
               <?= $form->field($model, 'material')->label('Выберите сырье: ')->dropDownList([
                     'Шрот' => 'Шрот',
                     'Жмых' => 'Жмых',
                     'Соя' => 'Соя'
                   ],
                   ['prompt' => 'Выберите один вариант']); ?>
-
               <?= $form->field($model, 'weight')->label('Выберите массу: ')->dropDownList([
                     '25' => '25',
                     '50' => '50',

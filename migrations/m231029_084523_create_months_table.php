@@ -20,13 +20,11 @@ class m231029_084523_create_months_table extends Migration
             'created_at' => $this->datetime()->append('DEFAULT CURRENT_TIMESTAMP')->notNull(),
             'updated_at' => $this->datetime()->append('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull(),
         ]);
-
         $this->createIndex(
             'idx-months-id',
             '{{%months}}',
             'id'
         );
-
         $this->batchInsert('{{%months}}',['name'], [
             ['Январь'],
             ['Февраль'],
@@ -41,7 +39,6 @@ class m231029_084523_create_months_table extends Migration
             ['Ноябрь'],
             ['Декабрь']
             ]);
-
     }
 
     /**

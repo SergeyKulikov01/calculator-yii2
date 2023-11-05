@@ -19,18 +19,14 @@ class ProcessController extends Controller
         $basePath = __DIR__ . '/../runtime/queue.job';
         while(true) {
             echo 'Текущая итерация: ' . $counter . PHP_EOL;
-
             if(file_exists($basePath) === true) {
                 $data = file_get_contents($basePath);
                 echo $data . PHP_EOL;
                 unlink($basePath);
             }
-
             Sleep(2);
             $counter++;
         }
-
-
         return ExitCode::OK;
     }
 }
