@@ -20,9 +20,37 @@ class Prices extends ActiveRecord
         foreach ($resp as $key => $value){
             $pr[$value["tonnage"]] =  $value["price"];
             $mo[$value["month"]] = $pr;
+            $tt[$type] = $mo;
         }
-        $otv= ['price' => $calc->price,'price_list' => $mo];
+        $otv= ['price' => $calc->price,'price_list' => $tt];
         return $otv;
+    }
+    public function UpdatePrice($arr){
+        $price = Prices::find()
+            ->joinWith(['months','tonnages','raw_types'])
+            ->where(['raw_types.name' => $arr['raw_type'],'months.name'=>$arr['month'],'tonnages.value'=>$arr['tonnage']])
+            ->One();
+        $price->price = $arr['value'];
+        $price->save();
+        return 'Успешно обновлено ' . $price->id;
+    }
+    public function AddPrice($arr){
+        $id_month = Months::find()
+            ->where(['name' => $arr['month']])
+            ->one();
+        $id_type = Raw_types::find()
+            ->where(['name' => $arr['raw_type']])
+            ->one();
+        $id_tonnage = Tonnages::find()
+            ->where(['value' => $arr['tonnage']])
+            ->one();
+        $req = new Prices();
+        $req->price = $arr['value'];
+        $req->month_id = $id_month->id;
+        $req->raw_type_id = $id_type->id;
+        $req->tonnage_id = $id_tonnage->id;
+        $req->save();
+        return 'Успешно добавлено';
     }
     public static function tableName(): string
     {

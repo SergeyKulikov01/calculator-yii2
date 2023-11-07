@@ -55,10 +55,12 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'api/v1/json-schema' => 'api/get-spec',
                 [
                     'class' => '\yii\rest\UrlRule',
                     'controller' => ['api/v1/CalculatePrice'],
-                ]
+                ],
+
             ],
         ],
 
