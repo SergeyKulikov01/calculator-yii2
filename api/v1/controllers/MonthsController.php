@@ -11,18 +11,16 @@ class MonthsController extends Controller
     public function actionIndex()
     {
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $request = Yii::$app->request;
+        if ($request->isGet) {
             $responce = new Months();
             return $responce->MonthsList();
-        }else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $request = Yii::$app->request;
+        }else if ($request->isPost) {
             $name = $request->post();
             $responce = new Months();
             return $responce->AddMonths($name["month"]);
-        } else if ($_SERVER['REQUEST_METHOD'] === 'DELETE'){
-            $request = Yii::$app->request;
-            $month = $request->getBodyParam('month');
+        } else if ($request->isDelete){
+            $month = $request->get('month');
             $responce = new Months();
             return $responce->DeleteMonths($month);
         }

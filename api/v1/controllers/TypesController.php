@@ -10,18 +10,17 @@ class TypesController extends Controller
 {
     public function actionIndex()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $request = Yii::$app->request;
+        if ($request->isGet) {
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             $responce = new Raw_types();
             return $responce->TypesList();
-        }else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $request = Yii::$app->request;
+        }else if ($request->isPost) {
             $name = $request->post();
             $responce = new Raw_types();
             return $responce->AddType($name["raw_type"]);
-        } else if ($_SERVER['REQUEST_METHOD'] === 'DELETE'){
-            $request = Yii::$app->request;
-            $type = $request->getBodyParam('raw_type');
+        } else if ($request->isDelete){
+            $type = $request->get('type');
             $responce = new Raw_types();
             return $responce->DeleteType($type);
         }
