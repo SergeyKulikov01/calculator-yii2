@@ -142,26 +142,10 @@ class SiteController extends Controller
                     'month => ' . $model->month . PHP_EOL .
                     'weight => ' . $model->weight . PHP_EOL;
             file_put_contents($basePath, $text);
-
-            $resp = Prices::find()
-                ->JoinWith(['months','tonnages','raw_types'])
-                ->select(['month' => 'months.name','tonnage' => 'tonnages.value','price'])
-                ->where(['raw_types.name' => $model->material])
-                ->asArray()
-                ->all();
-
-            foreach ($resp as $key => $value){
-                $pr[$value["tonnage"]] =  $value["price"];
-                $mo[$value["month"]] = $pr;
-            }
-            $calculation = Prices::find()
-                ->joinWith(['months','tonnages','raw_types'])
-                ->where(['raw_types.name' => $model->material,'months.name'=>$model->month,'tonnages.value'=>$model->weight])
-                ->One();
-            
-            return $this->render('calcform', ['array' => $mo, 'calculation' => $calculation->price]);
+            $responce = new Prices();
+            $otv = $responce->PriceList($model->month,$model->material,$model->weight);
+            return $this->render('calcform', ['array' => $otv['price_list'], 'calculation' => $otv['price']]);
         }
-
         return $this->render('form', ['model'=> $model]);
     }
 }
