@@ -18,18 +18,15 @@ class m231029_085906_create_raw_types_table extends Migration
             'created_at' => $this->datetime()->append('DEFAULT CURRENT_TIMESTAMP')->notNull(),
             'updated_at' => $this->datetime()->append('DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')->notNull(),
         ]);
-
         $this->createIndex(
             'idx-raw_types-id',
             '{{%raw_types}}',
             'id'
         );
-
         $this->batchInsert('{{%raw_types}}',['name'], [
             ['Шрот'],
             ['Жмых'],
             ['Соя'],
-
         ]);
     }
 
