@@ -25,14 +25,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo '<td>75</td>';
                 echo '<td>100</td>';
                 echo "</tr>";
-                foreach($array as $key => $value) {
-                    echo "<tr>";
-                    echo "<td> $key </td>";
-                    foreach($value as $price) {
-                        echo "<td> $price </td>";
-                    }
-                    echo "</tr>";
-                }
+//                foreach($array as $key => $value) {
+//                    echo "<tr>";
+//                    echo "<td> $key </td>";
+//                    foreach($value as $price) {
+//                        echo "<td> $price </td>";
+//                    }
+//                    echo "</tr>";
+//                }
+            var_dump($array);
                 echo "</table>";
             ?>
         </div>

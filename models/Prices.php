@@ -25,6 +25,27 @@ class Prices extends ActiveRecord
         $otv= ['price' => $calc->price,'price_list' => $tt];
         return $otv;
     }
+
+    public function PriceListForm($month,$type,$tonnage ){
+        $calc = Prices::find()
+            ->joinWith(['months','tonnages','raw_types'])
+            ->where(['raw_types.id' => $type,'months.id'=>$month,'tonnages.id'=>$tonnage])
+            ->One();
+        $resp = Prices::find()
+            ->JoinWith(['months','tonnages','raw_types'])
+            ->select(['month' => 'months.id','tonnage' => 'tonnages.id','price'])
+            ->where(['raw_types.name' => $type])
+            ->asArray()
+            ->all();
+        foreach ($resp as $key => $value){
+            $pr[$value["tonnage"]] =  $value["price"];
+            $mo[$value["month"]] = $pr;
+            $tt[$type] = $mo;
+        }
+        $otv= ['price' => $calc->price,'price_list' => $tt];
+        return $otv;
+    }
+
     public function UpdatePrice($arr){
         $price = Prices::find()
             ->joinWith(['months','tonnages','raw_types'])

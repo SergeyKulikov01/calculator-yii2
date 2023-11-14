@@ -4,6 +4,9 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\Months;
+use app\models\Raw_types;
+use app\models\Tonnages;
 
 $this->title = 'Form';
 $this->params['breadcrumbs'][] = $this->title;
@@ -14,29 +17,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-5">
-          <?php $form = ActiveForm::begin(); ?>
-              <?= $form->field($model, 'month')->label('Выберите месяц: ')->dropDownList([
-                    'Январь' => 'Январь',
-                    'Февраль' => 'Февраль',
-                    'Август' => 'Август',
-                    'Сентябрь' => 'Сентябрь',
-                    'Октябрь' => 'Октябрь',
-                    'Ноябрь' => 'Ноябрь'
-                  ],
-                  ['prompt' => 'Выберите один вариант']); ?>
-              <?= $form->field($model, 'material')->label('Выберите сырье: ')->dropDownList([
-                    'Шрот' => 'Шрот',
-                    'Жмых' => 'Жмых',
-                    'Соя' => 'Соя'
-                  ],
-                  ['prompt' => 'Выберите один вариант']); ?>
-              <?= $form->field($model, 'weight')->label('Выберите массу: ')->dropDownList([
-                    '25' => '25',
-                    '50' => '50',
-                    '75' => '75',
-                    '100' => '100'
-                  ],
-                  ['prompt' => 'Выберите один вариант']); ?>
+          <?php $form = ActiveForm::begin(['id' => 'test-form']); ?>
+            <?= $form->field($model, 'month')->label('Выберите месяц: ')->dropDownList(
+                Months::find()->select(['name', 'id'])->IndexBy('id')->OrderBy('id')->column(),
+                ['prompt' => 'Выберите один вариант']); ?>
+            <?= $form->field($model, 'material')->label('Выберите сырье: ')->dropDownList(
+                Raw_types::find()->select(['name', 'id'])->IndexBy('id')->OrderBy('id')->column(),
+                ['prompt' => 'Выберите один вариант']); ?>
+            <?= $form->field($model, 'weight')->label('Выберите массу: ')->dropDownList(
+                Tonnages::find()->select(['value', 'id'])->IndexBy('id')->OrderBy('id')->column(),
+                ['prompt' => 'Выберите один вариант']); ?>
               
     <div class="form-group">
         <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']) ?>
@@ -46,6 +36,25 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
       </div>
     </div>
-    
-
 </div>
+<?php
+$js = <<<JS
+     $('form').on('beforeSubmit', function(){
+	 var data = $(this).serialize();
+	 $.ajax({
+	    url: '/site/form',
+	    type: 'POST',
+	    data: data,
+	    success: function(res){
+	       console.log(res);
+	    },
+	    error: function(){
+	       alert('Error!');
+	    }
+	 });
+	 return false;
+     });
+JS;
+
+$this->registerJs($js);
+?>
