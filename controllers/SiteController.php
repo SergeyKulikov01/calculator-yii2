@@ -138,14 +138,15 @@ class SiteController extends Controller
         $basePath = __DIR__ . '/../runtime/queue.job';
 
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
-            print_r($model);
             $text = 'material => ' . $model->material . PHP_EOL .
                 'month => ' . $model->month . PHP_EOL .
                 'weight => ' . $model->weight . PHP_EOL;
             file_put_contents($basePath, $text);
             $responce = new Prices();
             $otv = $responce->PriceListForm($model->month, $model->material, $model->weight);
-            return $this->render('form', ['array' => $otv['price_list'], 'calculation' => $otv['price']]);
+            $priceList = $otv['price_list'];
+            $calculation = $otv['price'];
+            return $this->render('form', compact('model','calculation','priceList'));
         }
         return $this->render('form', compact('model'));
     }

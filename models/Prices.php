@@ -34,7 +34,7 @@ class Prices extends ActiveRecord
         $resp = Prices::find()
             ->JoinWith(['months','tonnages','raw_types'])
             ->select(['month' => 'months.id','tonnage' => 'tonnages.id','price'])
-            ->where(['raw_types.name' => $type])
+            ->where(['raw_types.id' => $type])
             ->asArray()
             ->all();
         foreach ($resp as $key => $value){

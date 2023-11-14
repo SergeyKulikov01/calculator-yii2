@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
 use app\models\Months;
 use app\models\Raw_types;
 use app\models\Tonnages;
+use yii\widgets\Pjax;
 
 $this->title = 'Form';
 $this->params['breadcrumbs'][] = $this->title;
@@ -17,7 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-5">
-          <?php $form = ActiveForm::begin(['id' => 'test-form']); ?>
+            <?php Pjax::begin() ?>
+          <?php $form = ActiveForm::begin(['options' => ['data' => ['pjax' => true]]]); ?>
             <?= $form->field($model, 'month')->label('Выберите месяц: ')->dropDownList(
                 Months::find()->select(['name', 'id'])->IndexBy('id')->OrderBy('id')->column(),
                 ['prompt' => 'Выберите один вариант']); ?>
@@ -34,27 +36,28 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php ActiveForm::end(); ?>
         </div>
+          <?php if (!empty($calculation)) {
+              echo number_format($calculation) . "₽";
+              echo '<br>';
+              echo PHP_EOL . '+----------+----+----+----+-----+'. PHP_EOL;
+              echo '<br>';
+              echo '| М\Т      | 25 | 50 | 75 | 100 |';
+              echo '<br>';
+              foreach($priceList as $key => $value) {
+                  echo PHP_EOL . "+----------+----+----+----+-----+". PHP_EOL;
+                  echo '<br>';
+                  echo "| $key |";
+                  foreach($value as $price) {
+                      foreach($price as $aa) {
+                          echo " $aa |";
+                      }
+                  }
+              }
+              echo '<br>';
+              echo PHP_EOL . "+----------+----+----+----+-----+". PHP_EOL;
+              var_dump($priceList) ;
+          } ?>
       </div>
     </div>
 </div>
-<?php
-$js = <<<JS
-     $('form').on('beforeSubmit', function(){
-	 var data = $(this).serialize();
-	 $.ajax({
-	    url: '/site/form',
-	    type: 'POST',
-	    data: data,
-	    success: function(res){
-	       console.log(res);
-	    },
-	    error: function(){
-	       alert('Error!');
-	    }
-	 });
-	 return false;
-     });
-JS;
-
-$this->registerJs($js);
-?>
+<?php Pjax::end() ?>
