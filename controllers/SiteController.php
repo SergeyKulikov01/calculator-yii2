@@ -171,7 +171,7 @@ class SiteController extends Controller
             $hash = Yii::$app->getSecurity()->generatePasswordHash($model->password);
             $user = new Users();
             $user->AddUser($model->name,$model->email,$hash);
-            $messege = "Успешно! Теперь вы можете авторизироваться" . $model->name . $model->email;
+            $messege = "Успешно! Теперь вы можете авторизироваться";
             return $this->render('login', ['model' => $login_model,'messege' => $messege]);
         }
 
