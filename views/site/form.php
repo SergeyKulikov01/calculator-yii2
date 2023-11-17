@@ -2,6 +2,8 @@
 
 /** @var yii\web\View $this */
 
+use yii\data\ArrayDataProvider;
+use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Months;
@@ -38,24 +40,27 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
           <?php if (!empty($calculation)) {
               echo number_format($calculation) . "₽";
-              echo '<br>';
-              echo PHP_EOL . '+----------+----+----+----+-----+'. PHP_EOL;
-              echo '<br>';
-              echo '| М\Т      | 25 | 50 | 75 | 100 |';
-              echo '<br>';
-              foreach($priceList as $key => $value) {
-                  echo PHP_EOL . "+----------+----+----+----+-----+". PHP_EOL;
-                  echo '<br>';
-                  echo "| $key |";
-                  foreach($value as $price) {
-                      foreach($price as $aa) {
-                          echo " $aa |";
-                      }
-                  }
-              }
-              echo '<br>';
-              echo PHP_EOL . "+----------+----+----+----+-----+". PHP_EOL;
-              var_dump($priceList) ;
+
+                foreach ($priceList as $key => $value) {
+                    echo GridView::widget([
+                        'dataProvider' => new ArrayDataProvider([
+                            'allModels' => $value,
+                            'pagination' => false,
+                        ]),
+                        'columns' => [
+                                [
+                                    //'attribute' => $value,
+                                    'label' => 'Месяц',
+                                ],
+                            //'Месяц' => $key,
+                            '25',
+                            '50',
+                            '75',
+                            '100',
+                        ],
+                    ]);
+                }
+
           } ?>
       </div>
     </div>

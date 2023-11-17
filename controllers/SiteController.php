@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use app\models\Prices;
+use app\models\SignupForm;
+use app\models\Users;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -11,6 +13,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\CalcForm;
+use yii\widgets\ActiveForm;
 
 class SiteController extends Controller
 {
@@ -146,8 +149,32 @@ class SiteController extends Controller
             $otv = $responce->PriceListForm($model->month, $model->material, $model->weight);
             $priceList = $otv['price_list'];
             $calculation = $otv['price'];
+            $type = $model->material;
+            $month = $model->material;
+            $tonnage = $model->material;
             return $this->render('form', compact('model','calculation','priceList'));
         }
         return $this->render('form', compact('model'));
+    }
+
+    public function actionSignup()
+    {
+        $model = new SignupForm();
+        $login_model = new LoginForm();
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            $hash = Yii::$app->getSecurity()->generatePasswordHash($model->password);
+            $user = new Users();
+            $user->AddUser($model->name,$model->email,$hash);
+            $messege = "Успешно! Теперь вы можете авторизироваться" . $model->name . $model->email;
+            return $this->render('login', ['model' => $login_model,'messege' => $messege]);
+        }
+
+        return $this->render('signup', compact('model'));
     }
 }

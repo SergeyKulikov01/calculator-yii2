@@ -33,7 +33,7 @@ class Prices extends ActiveRecord
             ->One();
         $resp = Prices::find()
             ->JoinWith(['months','tonnages','raw_types'])
-            ->select(['month' => 'months.id','tonnage' => 'tonnages.id','price'])
+            ->select(['month' => 'months.name','tonnage' => 'tonnages.value','price'])
             ->where(['raw_types.id' => $type])
             ->asArray()
             ->all();
