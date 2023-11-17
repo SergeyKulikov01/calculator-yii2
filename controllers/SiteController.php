@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Prices;
 use app\models\SignupForm;
+use app\models\User;
 use app\models\Users;
 use Yii;
 use yii\filters\AccessControl;
@@ -82,7 +83,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->redirect(['site/form']);
         }
 
         $model->password = '';
@@ -170,7 +171,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $hash = Yii::$app->getSecurity()->generatePasswordHash($model->password);
             $user = new Users();
-            $user->AddUser($model->name,$model->email,$hash);
+            $user->AddUser($model->name,$model->username,$hash);
             $messege = "Успешно! Теперь вы можете авторизироваться";
             return $this->render('login', ['model' => $login_model,'messege' => $messege]);
         }

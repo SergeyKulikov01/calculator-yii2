@@ -19,7 +19,7 @@ $this->title = 'Регистрация';
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(['id' => 'signup-form']); ?>
             <?= $form->field($model, 'name')->input('text')->label('Введите имя:') ?>
-            <?= $form->field($model, 'email',['enableAjaxValidation' => true])->label('Введите свой email: ')->input('email') ?>
+            <?= $form->field($model, 'username',['enableAjaxValidation' => true])->label('Введите свой email: ')->input('email') ?>
             <?= $form->field($model, 'password')->label('Введите пароль: ')->passwordInput() ?>
             <?= $form->field($model, 'password_repeat')->label('Повторите пароль: ')->passwordInput() ?>
 

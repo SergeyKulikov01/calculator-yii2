@@ -29,7 +29,7 @@ $this->title = 'Авторизация';
 //                ],
             ]); ?>
 
-            <?= $form->field($model, 'username')->label('Введите E-mail: ')->input('text') ?>
+            <?= $form->field($model, 'username')->label('Введите свой email: ')->input('email') ?>
 
             <?= $form->field($model, 'password')->label('Введите пароль: ')->passwordInput() ?>
 
