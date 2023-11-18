@@ -47,6 +47,10 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->id;
     }
+    public function getName()
+    {
+        return \Yii::$app->user->identity->name;
+    }
 
     /**
      * {@inheritdoc}

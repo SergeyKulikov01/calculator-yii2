@@ -16,7 +16,14 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-about">
     <h1>Калькулятор стоимости доставки сырья</h1>
-
+    <?php if (!Yii::$app->user->isGuest) {
+ ?>
+    <div class="alert alert-success" role="alert" id="popup">
+        <p>Здравствуйте,<?php echo Yii::$app->user->identity->name ?>, вы авторизовались в системе расчета стоимости доставки.
+            Теперь все ваши расчеты будут сохранены для последующего просмотра в <a href="calculation/history" class="alert-link">журнале расчетов</a></p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="hideBlock()"></button>
+    </div>
+    <?php } ?>
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-5">
@@ -66,3 +73,20 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <?php Pjax::end() ?>
+<?php
+$script = <<< JS
+var block = document.getElementById("#popup");
+
+// Проверяем, был ли блок скрыт ранее
+if (localStorage.getItem("blockHidden") === "true") {
+  block.style.display = "none"; // Скрываем блок
+}
+
+// Функция для скрытия блока и сохранения состояния
+function hideBlock() {
+  block.style.display = "none"; // Скрываем блок
+  localStorage.setItem("blockHidden", "true"); // Сохраняем состояние
+}
+JS;
+$this->registerJs($script);
+?>
