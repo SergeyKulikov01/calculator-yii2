@@ -170,12 +170,35 @@ class SiteController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $hash = Yii::$app->getSecurity()->generatePasswordHash($model->password);
-            $user = new Users();
+            $user = new User();
             $user->AddUser($model->name,$model->username,$hash);
             $messege = "Успешно! Теперь вы можете авторизироваться";
             return $this->render('login', ['model' => $login_model,'messege' => $messege]);
         }
 
         return $this->render('signup', compact('model'));
+    }
+    public function actionProfile()
+    {
+        $userId = Yii::$app->user->id;
+        $user = User::findOne($userId);
+        $userRole = array_values(Yii::$app->authManager->getRolesByUser($userId));
+        return $this->render('profile', compact('user','userRole'));
+    }
+    public function actionUsers()
+    {
+        $users = User::find()->asArray()->all();
+        foreach ($users as $value){
+            $userRole = array_values(Yii::$app->authManager->getRolesByUser($value['id']));
+            $value['role'] = $userRole[0]->description;
+            //$allUsers[] = array($key => $value) ;
+            $allUsers[] = $value;
+        }
+
+        return $this->render('users',compact('allUsers'));
+    }
+    public function actionHistory()
+    {
+        return $this->render('history');
     }
 }

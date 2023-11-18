@@ -39,42 +39,56 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'Калькулятор', 'url' => ['/site/form']],
+                ['label' => 'Home', 'url' => ['/site/index']],
+                ['label' => 'About', 'url' => ['/site/about']],
+                ['label' => 'Contact', 'url' => ['/site/contact']],
+                ['label' => 'Калькулятор', 'url' => ['/site/form']],
         ]
+
     ]);
-//    echo Nav::widget([
-//        'options' => ['class' => 'navbar-nav navbar-right ms-auto'],
-//        'items' => [
-//            ['label' => 'Регистрация', 'url' => ['/site/signup']],
-//            Yii::$app->user->isGuest
-//                ? ['label' => 'Войти в систему', 'url' => ['/site/login']]
-//                : '<li class="nav-item">'
-//                . Html::beginForm(['/site/logout'])
-//                . Html::submitButton(
-//                    'Logout (' . Yii::$app->user->identity->username . ')',
-//                    ['class' => 'nav-link btn btn-link logout']
-//                )
-//                . Html::endForm()
-//                . '</li>'
-//        ]
-//    ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right ms-auto'],
-        'items' => [
-            ['label' => 'Регистрация', 'url' => ['/site/signup'], 'visible' => Yii::$app->user->isGuest],
-            ['label' => 'Войти в систему', 'url' => ['/site/login'],'visible' => Yii::$app->user->isGuest],
-            ['label' => Yii::$app->user->identity->name, 'items' =>[
-                    ['label' => 'Профиль', 'url' => ['/site/index']],
-                ['label' => 'История расчетов', 'url' => ['/site/index']],
-                ['label' => 'Пользователи', 'url' => ['/site/index']],
-                ['label' => 'Выход', 'url' => ['/site/logout'],'template' => '<a href="{url}" data-method="post">{label}</a>'],
-                ]
+
+
+    if (Yii::$app->user->isGuest) {
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav ml-auto'],
+            'items' => [
+                ['label' => 'Регистрация', 'url' => ['/site/signup']],
+                ['label' => 'Войти', 'url' => ['/site/login']],
             ],
-        ]
-    ]);
+        ]);
+    } elseif (Yii::$app->user->can('isAdmin'))
+    {
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav navbar-right ms-auto'],
+            'items' => [
+                [
+                    'label' => Yii::$app->user->identity->name,
+                    'items' => [
+                        ['label' => 'Профиль', 'url' => ['/site/profile']],
+                        ['label' => 'Пользователи', 'url' => ['/site/users']],
+                        ['label' => 'История расчетов', 'url' => ['/site/history']],
+                        ['label' => 'Выход', 'url' => ['/site/logout'], 'linkOptions' => ['data-method' => 'post']],
+                    ],
+                ],
+            ],
+        ]);
+    } else
+    {
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav navbar-right ms-auto'],
+            'items' => [
+                [
+                    'label' => Yii::$app->user->identity->name,
+                    'items' => [
+                        ['label' => 'Профиль', 'url' => ['/site/profile']],
+                        ['label' => 'История расчетов', 'url' => ['/site/history']],
+                        ['label' => 'Выход', 'url' => ['/site/logout'], 'linkOptions' => ['data-method' => 'post']],
+                    ],
+                ],
+            ],
+        ]);
+    }
+
     NavBar::end();
     ?>
 </header>

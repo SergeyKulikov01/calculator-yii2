@@ -79,6 +79,17 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return \Yii::$app->security->validatePassword($password, $this->password);
     }
+    public function AddUser($name,$email,$hash){
+        $user = new User();
+        $user->name = $name;
+        $user->username = $email;
+        $user->password = $hash;
+        $user->save();
+
+        $auth = Yii::$app->authManager;
+        $userRole = $auth->getRole('user');
+        $auth->assign($userRole,  $user->getId());
+    }
 }
 
 
