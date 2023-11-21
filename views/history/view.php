@@ -17,23 +17,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Уверены что хотите удалить данный расчет?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
     <?php
+    $admin = Yii::$app->user->can('isAdmin');
         echo DetailView::widget([
             'model' => $info,
             'attributes' => [
                 [
                     'label' => 'Id рассчета',
                     'value' => $info->id,
+                ],
+                [
+                    'label' => 'Пользователь',
+                    'value' => $info->username,
+                    'visible' => $admin
                 ],
                 [
                     'label' => 'Месяц',

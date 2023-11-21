@@ -5,6 +5,7 @@
 use yii\data\ArrayDataProvider;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 $this->title = 'История расчетов';
@@ -14,13 +15,13 @@ $this->title = 'История расчетов';
 
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-5">
+            <div class="col">
                 <?php Pjax::begin(); ?>
                 <?php
                 $admin = Yii::$app->user->can('isAdmin');
                 echo GridView::widget([
                     'dataProvider' => $dataProvider,
-                    'layout'=>"{sorter}\n{pager}\n{summary}\n{items}",
+                    'summary' => false,
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
                         [
@@ -56,6 +57,7 @@ $this->title = 'История расчетов';
                         [
                             'label' => 'Создано',
                             'attribute' => 'created_at',
+                            'format' => 'datetime',
                         ],
 
                         [
@@ -63,6 +65,9 @@ $this->title = 'История расчетов';
                             'header'=>'Действия',
                             'headerOptions' => ['width' => '80'],
                             'template' => '{view} {delete}',
+                            'visibleButtons' => [
+                                'delete' => $admin
+                            ]
                         ],
                     ],
                 ]);

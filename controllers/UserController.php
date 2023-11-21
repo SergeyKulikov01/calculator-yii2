@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\User;
 use app\models\UserSearch;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -26,6 +27,15 @@ class UserController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
+                    ],
+                ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow'   => true,
+                            'roles'   => ['administrator'],
+                        ],
                     ],
                 ],
             ]
@@ -137,10 +147,7 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-//        $auth = Yii::$app->authManager;
-//        $role = Yii::$app->authManager->getRolesByUser($id);
-//        $auth->revoke($role,  $id);
-//        $this->findModel($id)->delete();
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }

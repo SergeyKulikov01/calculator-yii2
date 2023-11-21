@@ -18,7 +18,7 @@ $this->title = 'Калькулятор';
     <?php if (!Yii::$app->user->isGuest) {
  ?>
     <div class="alert alert-success" role="alert" id="popup">
-        <p>Здравствуйте,<?php echo Yii::$app->user->identity->name ?>, вы авторизовались в системе расчета стоимости доставки.
+        <p>Здравствуйте, <?php echo Yii::$app->user->identity->name ?> , вы авторизовались в системе расчета стоимости доставки.
             Теперь все ваши расчеты будут сохранены для последующего просмотра в <a href="/history/index" class="alert-link">журнале расчетов</a></p>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" id="close-btn"></button>
     </div>
@@ -96,14 +96,6 @@ $script = <<< JS
     $('#close-btn').on('click', function() {
          document.cookie = "hidden=true; max-age=100";
     });
-
-// var block = document.getElementById("#popup");
-// // Проверяем, был ли блок скрыт ранее
-// if (localStorage.getItem("blockHidden") === "true") {
-//   block.style.display = "none"; // Скрываем блок
-// }
-// // Функция для скрытия блока и сохранения состояния
-// function hideBlock() {
 
 JS;
 $this->registerJs($script);

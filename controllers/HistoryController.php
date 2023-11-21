@@ -10,7 +10,6 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
 use app\models\History;
 
 class HistoryController extends Controller
@@ -23,24 +22,13 @@ class HistoryController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout','users'],
+                'only' => ['delete'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                    [
                         'allow'   => true,
-                        'actions' => ['users'],
+                        'actions' => ['delete'],
                         'roles'   => ['administrator'],
                     ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'logout' => ['post'],
                 ],
             ],
         ];
@@ -69,7 +57,13 @@ class HistoryController extends Controller
      */
     public function actionIndex()
     {
-        $query = History::find();
+
+
+        if (Yii::$app->user->can('isAdmin')){
+            $query = History::find();
+        } else {
+            $query = History::find()->where(['user_id' => Yii::$app->user->identity->id]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -96,42 +90,5 @@ class HistoryController extends Controller
         return $this->render('view', [
             'model' => $array,'info' => $history
         ]);
-    }
-    public function actionHistory()
-    {
-        $calc = History::find()->asArray()->all();
-
-        if (Yii::$app->user->can('isAdmin')){
-            $calc = History::find()->asArray()->all();
-            foreach ($calc as $value){
-                $userRole = array_values(Yii::$app->authManager->getRolesByUser($value['user_id']));
-                $monthArray = Months::find()->where(['id' => $value['month']])->select('name')->asArray()->One();
-                $value['monthName'] = $monthArray['name'] ;
-                $typeArray = Raw_types::find()->where(['id' => $value['type']])->select('name')->asArray()->One();
-                $value['typeName'] = $typeArray['name'] ;
-                $tonnageArray = Tonnages::find()->where(['id' => $value['tonnage']])->select('value')->asArray()->One();
-                $value['tonnageName'] = $tonnageArray['value'] ;
-                $userArray = User::find()->where(['id' => $value['user_id']])->select('name')->asArray()->One();
-                $value['name'] = $userArray['name'] ;
-                $value['role'] = $userRole[0]->description;
-                $allCalc[] = $value;
-                $admin = true;
-            }
-        } else {
-            $userId = Yii::$app->user->id;
-            $calc = History::find()->where(['user_id' => $userId])->asArray()->all();
-            foreach ($calc as $value){
-                $userRole = array_values(Yii::$app->authManager->getRolesByUser($value['id']));
-                $monthArray = Months::find()->where(['id' => $value['month']])->select('name')->asArray()->One();
-                $value['monthName'] = $monthArray['name'] ;
-                $typeArray = Raw_types::find()->where(['id' => $value['type']])->select('name')->asArray()->One();
-                $value['typeName'] = $typeArray['name'] ;
-                $tonnageArray = Tonnages::find()->where(['id' => $value['tonnage']])->select('value')->asArray()->One();
-                $value['tonnageName'] = $tonnageArray['value'] ;
-                $allCalc[] = $value;
-                $admin = false;
-            }
-        }
-        return $this->render('history',compact('allCalc','admin'));
     }
 }

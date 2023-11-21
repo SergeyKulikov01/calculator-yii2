@@ -12,6 +12,7 @@ use yii\bootstrap5\NavBar;
 
 AppAsset::register($this);
 
+
 $this->registerCsrfMetaTags();
 $this->registerMetaTag(['charset' => Yii::$app->charset], 'charset');
 $this->registerMetaTag(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, shrink-to-fit=no']);
@@ -39,9 +40,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-                ['label' => 'Home', 'url' => ['/site/index']],
-                ['label' => 'About', 'url' => ['/site/about']],
-                ['label' => 'Contact', 'url' => ['/site/contact']],
+                ['label' => 'Главная', 'url' => ['/site/index']],
+                ['label' => 'О нас', 'url' => ['/site/about']],
+                ['label' => 'Контакты', 'url' => ['/site/contact']],
                 ['label' => 'Калькулятор', 'url' => ['/site/form']],
         ]
 
