@@ -2,9 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\Months;
 use app\models\Prices;
+use app\models\Raw_types;
 use app\models\SignupForm;
+use app\models\Tonnages;
 use app\models\User;
+use app\models\UserForm;
 use app\models\Users;
 use Yii;
 use yii\filters\AccessControl;
@@ -14,6 +18,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\CalcForm;
+use app\models\History;
 use yii\widgets\ActiveForm;
 
 class SiteController extends Controller
@@ -26,12 +31,17 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout'],
+                'only' => ['logout','users'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+                    [
+                        'allow'   => true,
+                        'actions' => ['users'],
+                        'roles'   => ['administrator'],
                     ],
                 ],
             ],
@@ -147,12 +157,18 @@ class SiteController extends Controller
                 'weight => ' . $model->weight . PHP_EOL;
             file_put_contents($basePath, $text);
             $responce = new Prices();
+
             $otv = $responce->PriceListForm($model->month, $model->material, $model->weight);
             $priceList = $otv['price_list'];
             $calculation = $otv['price'];
-            $type = $model->material;
-            $month = $model->material;
-            $tonnage = $model->material;
+            if (!Yii::$app->user->isGuest){
+                $month = Months::findOne($model->month);
+                $type = Raw_types::findOne($model->material);
+                $tonnage = Tonnages::findOne($model->weight);
+                $full_pricelist = json_encode($priceList);
+                $history = new History();
+                $history->historyAdd(Yii::$app->user->identity->id,$tonnage->value,$type->name,$calculation,$month->name,$full_pricelist);
+            }
             return $this->render('form', compact('model','calculation','priceList'));
         }
         return $this->render('form', compact('model'));
@@ -173,7 +189,7 @@ class SiteController extends Controller
             $user = new User();
             $user->AddUser($model->name,$model->username,$hash);
             $messege = "Успешно! Теперь вы можете авторизироваться";
-            return $this->render('login', ['model' => $login_model,'messege' => $messege]);
+            return $this->redirect(array('login','status' => 'success'));
         }
 
         return $this->render('signup', compact('model'));
@@ -184,21 +200,5 @@ class SiteController extends Controller
         $user = User::findOne($userId);
         $userRole = array_values(Yii::$app->authManager->getRolesByUser($userId));
         return $this->render('profile', compact('user','userRole'));
-    }
-    public function actionUsers()
-    {
-        $users = User::find()->asArray()->all();
-        foreach ($users as $value){
-            $userRole = array_values(Yii::$app->authManager->getRolesByUser($value['id']));
-            $value['role'] = $userRole[0]->description;
-            //$allUsers[] = array($key => $value) ;
-            $allUsers[] = $value;
-        }
-
-        return $this->render('users',compact('allUsers'));
-    }
-    public function actionHistory()
-    {
-        return $this->render('history');
     }
 }

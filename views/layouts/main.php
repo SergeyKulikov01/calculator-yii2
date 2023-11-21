@@ -65,8 +65,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     'label' => Yii::$app->user->identity->name,
                     'items' => [
                         ['label' => 'Профиль', 'url' => ['/site/profile']],
-                        ['label' => 'Пользователи', 'url' => ['/site/users']],
-                        ['label' => 'История расчетов', 'url' => ['/site/history']],
+                        ['label' => 'Пользователи', 'url' => ['/user/']],
+                        ['label' => 'История расчетов', 'url' => ['/history']],
                         ['label' => 'Выход', 'url' => ['/site/logout'], 'linkOptions' => ['data-method' => 'post']],
                     ],
                 ],
@@ -81,7 +81,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     'label' => Yii::$app->user->identity->name,
                     'items' => [
                         ['label' => 'Профиль', 'url' => ['/site/profile']],
-                        ['label' => 'История расчетов', 'url' => ['/site/history']],
+                        ['label' => 'История расчетов', 'url' => ['/history']],
                         ['label' => 'Выход', 'url' => ['/site/logout'], 'linkOptions' => ['data-method' => 'post']],
                     ],
                 ],

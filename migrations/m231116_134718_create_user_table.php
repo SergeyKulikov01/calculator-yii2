@@ -14,9 +14,10 @@ class m231116_134718_create_user_table extends Migration
     {
         $this->createTable('{{%user}}', [
             'id' => $this->primaryKey()->unsigned(),
-            'name' => $this->char(20)->notNull(),
-            'username' => $this->char(40)->notNull()->unique(),
-            'password' => $this->text()->notNull(),
+            'name' => $this->char(20)->notNull()->unsigned(),
+            'username' => $this->char(40)->notNull()->unique()->unsigned(),
+            'role' => $this->char(20)->notNull()->unsigned()->defaultValue('Пользователь'),
+            'password' => $this->text()->notNull()->unsigned(),
         ]);
     }
 

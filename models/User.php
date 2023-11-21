@@ -9,6 +9,8 @@ use yii\web\IdentityInterface;
 class User extends ActiveRecord implements IdentityInterface
 {
 
+    public $newrole;
+
     public static function tableName(): string
     {
         return '{{%user}}';
