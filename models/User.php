@@ -8,8 +8,12 @@ use yii\web\IdentityInterface;
 
 class User extends ActiveRecord implements IdentityInterface
 {
-
-    public $newrole;
+    public function rules()
+    {
+        return [
+            [['id','name','username','role'], 'string']
+        ];
+    }
 
     public static function tableName(): string
     {

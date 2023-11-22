@@ -72,28 +72,6 @@ class UserController extends Controller
     }
 
     /**
-     * Creates a new User model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
-    public function actionCreate()
-    {
-        $model = new User();
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
-        } else {
-            $model->loadDefaultValues();
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
      * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id
@@ -104,31 +82,19 @@ class UserController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post())) {
             $auth = Yii::$app->authManager;
+            $auth->revokeAll($model->id);
+            $newRole = $auth->getRole($model->role);
+            $auth->assign($newRole, $model->id);
 
-//            $oldRole =$auth->getRolesByUser($model->id) ;
-//            $auth->revoke($oldRole,  $model->id);
-//            $newRole = $auth->getRole('administrator');
-//            $auth->assign($newRole,  $model->id);
 
-            if ($model->newrole == 'user'){
-                $oldRole =$auth->getRole('user') ;
-                $auth->revoke($oldRole,  $model->id);
-                $newRole = $auth->getRole('administrator');
-                $auth->assign($newRole,  $model->id);
-            } else {
-                $oldRole =$auth->getRole('administrator') ;
-                $auth->revoke($oldRole,  $model->id);
-                $newRole = $auth->getRole('user');
-                $auth->assign($newRole,  $model->id);
-            }
-
+            $user = User::findOne($model->id);
             $userRole = array_values(Yii::$app->authManager->getRolesByUser($model->id));
             $role = $userRole[0]->description;
-            $user = User::findOne($model->id);
-            $user->role = $role;
-            $user->save();
+            $model->role = $role;
+            $model->save();
+
 
             return $this->redirect(['view', 'id' => $model->id]);
         }

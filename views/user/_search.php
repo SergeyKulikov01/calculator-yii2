@@ -24,6 +24,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'username') ?>
 
+    <?= $form->field($model, 'role') ?>
+
     <?= $form->field($model, 'password') ?>
 
     <div class="form-group">

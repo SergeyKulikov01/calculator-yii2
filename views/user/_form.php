@@ -18,14 +18,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'newrole')->dropdownList([
-            'administrator' => 'Администратор',
-            'user'=>'Пользователь'],
-            ['prompt'=>'Выберите роль']
+    <?= $form->field($model, 'role')->dropdownList([
+        'administrator' => 'Администратор',
+        'user' => 'Пользователь'],
+        ['prompt'=>'Выберите роль']
     ); ?>
 
+
     <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
