@@ -25,7 +25,7 @@ $this->title = 'Калькулятор';
     <?php } ?>
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-5">
+        <div class="col-5 ">
             <?php Pjax::begin() ?>
           <?php $form = ActiveForm::begin(['options' => ['data' => ['pjax' => true]]]); ?>
             <?= $form->field($model, 'month')->label('Выберите месяц: ')->dropDownList(
@@ -37,18 +37,22 @@ $this->title = 'Калькулятор';
             <?= $form->field($model, 'weight')->label('Выберите массу: ')->dropDownList(
                 Tonnages::find()->select(['value', 'id'])->IndexBy('id')->OrderBy('id')->column(),
                 ['prompt' => 'Выберите один вариант']); ?>
-              
     <div class="form-group">
         <?= Html::submitButton('Отправить', ['class' => 'btn btn-outline-success']) ?>
     </div>
 
 <?php ActiveForm::end(); ?>
         </div>
-          <div class="row align-items-center">
+
               <?php if (!empty($calculation)) {
+                  echo '<div class="card mb-3 calc-result" >';
+                  echo '<div class="card-header">';
                   echo '<h2> Результат: ';
                   echo number_format($calculation) . "₽";
                   echo '</h2>';
+                  echo '</div>';
+                  echo '<div class="card-body">';
+
 
                   foreach ($priceList as $id => $month){
                       foreach ($month as $monthname => $price){
@@ -82,6 +86,7 @@ $this->title = 'Калькулятор';
 
               } ?>
           </div>
+    </div>
 
       </div>
     </div>

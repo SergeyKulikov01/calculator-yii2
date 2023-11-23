@@ -12,13 +12,15 @@ $this->title = 'Профиль';
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-5">
-                <div>
+                <div class="card mb-3 calc-result">
+                    <div class="card-header">
                         <h2>Имя: <?= $user->name ?></h2>
-                    <div>
+                    </div>
+                    <div class="card-body">
                         <p ><strong>Почта:</strong> <?= $user->username ?></p>
                         <p ><strong>Роль:</strong> <?= $user->role  ?></p>
-                        <a href="/site/form"  class="btn btn-success">Новый расчет</a>
-                        <a href="/history/index" class="btn btn-warning">К моим расчетам</a>
+                        <a href="/site/form"  class="btn btn-outline-success card-link">Новый расчет</a>
+                        <a href="/history/index" class="btn btn-outline-warning card-link">К моим расчетам</a>
                     </div>
                 </div>
             </div>

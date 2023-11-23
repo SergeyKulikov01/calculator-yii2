@@ -29,7 +29,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout','users'],
+                'only' => ['logout','users','profile'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
@@ -40,6 +40,11 @@ class SiteController extends Controller
                         'allow'   => true,
                         'actions' => ['users'],
                         'roles'   => ['administrator'],
+                    ],
+                    [
+                        'allow'   => true,
+                        'actions' => ['profile'],
+                        'roles'   => ['administrator','user'],
                     ],
                 ],
             ],
@@ -122,7 +127,6 @@ class SiteController extends Controller
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
             Yii::$app->session->setFlash('contactFormSubmitted');
-
             return $this->refresh();
         }
         return $this->render('contact', [
@@ -175,7 +179,6 @@ class SiteController extends Controller
     public function actionSignup()
     {
         $model = new SignupForm();
-        $login_model = new LoginForm();
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -185,8 +188,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $hash = Yii::$app->getSecurity()->generatePasswordHash($model->password);
             $user = new User();
-            $user->AddUser($model->name,$model->username,$hash);
-            $messege = "Успешно! Теперь вы можете авторизироваться";
+            $user->addUser($model->name,$model->username,$hash);
             return $this->redirect(array('login','status' => 'success'));
         }
 

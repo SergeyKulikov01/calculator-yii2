@@ -65,9 +65,7 @@ $this->title = 'История расчетов';
                             'header'=>'Действия',
                             'headerOptions' => ['width' => '80'],
                             'template' => '{view} {delete}',
-                            'visibleButtons' => [
-                                'delete' => $admin
-                            ]
+                            'visibleButtons' => ['delete' => $admin]
                         ],
                     ],
                 ]);

@@ -87,9 +87,6 @@ class UserController extends Controller
             $auth->revokeAll($model->id);
             $newRole = $auth->getRole($model->role);
             $auth->assign($newRole, $model->id);
-
-
-            $user = User::findOne($model->id);
             $userRole = array_values(Yii::$app->authManager->getRolesByUser($model->id));
             $role = $userRole[0]->description;
             $model->role = $role;

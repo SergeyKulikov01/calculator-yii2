@@ -16,9 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="user-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
+    <a href="/history/index"  class="btn btn-outline-success card-link">Назад</a><br><br>
 
     <?php
-    $admin = Yii::$app->user->can('isAdmin');
+        $admin = Yii::$app->user->can('isAdmin');
         echo DetailView::widget([
             'model' => $info,
             'attributes' => [
@@ -48,8 +49,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => $info->created_at,
                     'format'=>'datetime'
                 ],
-        ],
-    ]);
+            ],
+        ]);
 
         echo GridView::widget([
             'dataProvider' => new ArrayDataProvider([
@@ -71,7 +72,5 @@ $this->params['breadcrumbs'][] = $this->title;
                 '100',
             ],
         ]);
-
     ?>
-
 </div>

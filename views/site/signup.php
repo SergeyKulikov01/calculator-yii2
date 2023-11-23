@@ -3,7 +3,7 @@
 /** @var yii\web\View $this */
 /** @var yii\bootstrap5\ActiveForm $form */
 
-/** @var app\models\Users $model */
+/** @var app\models\User $model */
 
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
@@ -13,7 +13,7 @@ $this->title = 'Регистрация';
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Запоните данные для регистрации:</p>
+    <p>Заполните данные для регистрации:</p>
 
     <div class="row">
         <div class="col-lg-5">

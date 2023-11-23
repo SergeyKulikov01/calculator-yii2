@@ -19,7 +19,6 @@ class SignupForm extends ActiveRecord
             [['password','password_repeat'], 'match', 'pattern' => '/^[a-zA-Z]+[0-9]+$/','message' => 'В пароле допустимы буквы a-Z и минимум одна цифра.'],
             ['password_repeat', 'compare', 'compareAttribute' => 'password','message' => 'Поля должны совпадать.'],
             ['username', 'unique','message' => 'Этот адрес Email уже занят.'],
-            //[['password','password','name','email'], 'required'],
         ];
     }
     public static function tableName(): string

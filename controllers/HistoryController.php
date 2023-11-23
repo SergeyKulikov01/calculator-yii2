@@ -2,10 +2,6 @@
 
 namespace app\controllers;
 
-use app\models\Months;
-use app\models\Raw_types;
-use app\models\Tonnages;
-use app\models\User;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -57,8 +53,6 @@ class HistoryController extends Controller
      */
     public function actionIndex()
     {
-
-
         if (Yii::$app->user->can('isAdmin')){
             $query = History::find();
         } else {
@@ -87,8 +81,6 @@ class HistoryController extends Controller
                 $array[] = $price;
             }
         }
-        return $this->render('view', [
-            'model' => $array,'info' => $history
-        ]);
+        return $this->render('view', ['model' => $array,'info' => $history]);
     }
 }

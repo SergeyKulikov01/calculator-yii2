@@ -16,23 +16,36 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-outline-primary']) ?>
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
+            'class' => 'btn btn-outline-danger',
             'data' => [
                 'confirm' => 'Вы уверены что хотите удалить пользователя?',
                 'method' => 'post',
             ],
         ]) ?>
+        <a href="/user/index"  class="btn btn-outline-success card-link">Назад</a>
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'name',
-            'username',
-            'role',
+            [
+                'label' => 'id',
+                'attribute' => 'id',
+            ],
+            [
+                'label' => 'Имя',
+                'attribute' => 'name',
+            ],
+            [
+                'label' => 'E-mail',
+                'attribute' => 'username',
+            ],
+            [
+                'label' => 'Роль',
+                'attribute' => 'role',
+            ],
         ],
     ]) ?>
 
