@@ -2,7 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\Months;
 use app\models\Prices;
+use app\models\Raw_types;
+use app\models\SignupForm;
+use app\models\Tonnages;
+use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -11,6 +16,8 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\CalcForm;
+use app\models\History;
+use yii\widgets\ActiveForm;
 
 class SiteController extends Controller
 {
@@ -22,12 +29,22 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout'],
+                'only' => ['logout','users','profile'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+                    [
+                        'allow'   => true,
+                        'actions' => ['users'],
+                        'roles'   => ['administrator'],
+                    ],
+                    [
+                        'allow'   => true,
+                        'actions' => ['profile'],
+                        'roles'   => ['administrator','user'],
                     ],
                 ],
             ],
@@ -79,7 +96,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->redirect(['site/form']);
         }
 
         $model->password = '';
@@ -110,7 +127,6 @@ class SiteController extends Controller
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
             Yii::$app->session->setFlash('contactFormSubmitted');
-
             return $this->refresh();
         }
         return $this->render('contact', [
@@ -136,16 +152,53 @@ class SiteController extends Controller
     {
         $model = new CalcForm();
         $basePath = __DIR__ . '/../runtime/queue.job';
-        
-        if ($model->load(Yii::$app->request->post())) {
+
+        if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             $text = 'material => ' . $model->material . PHP_EOL .
-                    'month => ' . $model->month . PHP_EOL .
-                    'weight => ' . $model->weight . PHP_EOL;
+                'month => ' . $model->month . PHP_EOL .
+                'weight => ' . $model->weight . PHP_EOL;
             file_put_contents($basePath, $text);
             $responce = new Prices();
-            $otv = $responce->PriceList($model->month,$model->material,$model->weight);
-            return $this->render('calcform', ['array' => $otv['price_list'], 'calculation' => $otv['price']]);
+
+            $otv = $responce->PriceListForm($model->month, $model->material, $model->weight);
+            $priceList = $otv['price_list'];
+            $calculation = $otv['price'];
+            if (!Yii::$app->user->isGuest){
+                $month = Months::findOne($model->month);
+                $type = Raw_types::findOne($model->material);
+                $tonnage = Tonnages::findOne($model->weight);
+                $full_pricelist = json_encode($priceList);
+                $history = new History();
+                $history->historyAdd(Yii::$app->user->identity->id,$tonnage->value,$type->name,$calculation,$month->name,$full_pricelist);
+            }
+            return $this->render('form', compact('model','calculation','priceList'));
         }
-        return $this->render('form', ['model'=> $model]);
+        return $this->render('form', compact('model'));
+    }
+
+    public function actionSignup()
+    {
+        $model = new SignupForm();
+
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            $hash = Yii::$app->getSecurity()->generatePasswordHash($model->password);
+            $user = new User();
+            $user->addUser($model->name,$model->username,$hash);
+            return $this->redirect(array('login','status' => 'success'));
+        }
+
+        return $this->render('signup', compact('model'));
+    }
+    public function actionProfile()
+    {
+        $userId = Yii::$app->user->id;
+        $user = User::findOne($userId);
+        $userRole = array_values(Yii::$app->authManager->getRolesByUser($userId));
+        return $this->render('profile', compact('user','userRole'));
     }
 }
